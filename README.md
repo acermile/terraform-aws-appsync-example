@@ -2,11 +2,16 @@
 
 ### Overview
 
-Provides Appsync API using API_KEY
-Provides an AppSync DataSource of DynamoDB, HTTP and AWS Lambda
-Provides an AppSync Function
-Provides an Appsync Resolver
+### Provides Appsync API using API_KEY with Schema , VLT templates
 
+### Provides an AppSync DataSource of DynamoDB, HTTP and AWS Lambda
+
+### Provides an AppSync Function
+
+### Provides an Appsync Resolver
+
+
+### Terraform resources :
 
 data.archive_file.bundle: Refreshing state...
 
@@ -76,19 +81,35 @@ aws_iam_role_policy.favorites: Refreshing state... [id=favorites:favorites]
 
 
 aws_iam_role_policy.address: Refreshing state... [id=address:address]
+
 aws_appsync_datasource.address-dynamodb: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-address]
+
 aws_appsync_resolver.Query_pipeline_currency: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Query-getConvertedPrice]
+
 aws_appsync_function.deleteFavorite: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-isi6brp6x5f3xcx5sfuvb7swcm]
+
 aws_appsync_function.getFavoritesbyUser: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-q7o5kmgtsveyhdbxpgikyj54be]
+
 aws_appsync_function.Mutation_addFavorite_Function: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-z6zazufrgfadtf6gsd2br7mrle]
+
 aws_appsync_function.getAddressbyUserID: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-fqvb32663zby5aydhvbg27dbw4]
+
 aws_appsync_function.addAddress: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-m7hgr4v23bcyxe5yg3lbv7m2tq]
+
 aws_appsync_function.mutation_user: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-cbh6pco2wzcz7csyae5i2wfsam]
+
 aws_appsync_function.getUserbyEmail: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-pys4pzvuivefvo7kvw246cizga]
+
 aws_appsync_resolver.Mutation_addAddress: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Mutation-addAddress]
+
 aws_appsync_resolver.getFavorite: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Query-getFavorite]
+
 aws_appsync_resolver.Mutation_deleteFavorite: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Mutation-deleteFavorite]
+
 aws_appsync_resolver.Mutation_addFavorite: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Mutation-addFavorite]
+
 aws_appsync_resolver.getAddressbyUserID: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Query-getAddress]
+
 aws_appsync_resolver.getUserbyEmail: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Query-getUser]
+
 aws_appsync_resolver.Mutation_addUser: Refreshing state... [id=e2flqlkxsfheph6bpmj3i576jy-Mutation-addUser]
