@@ -617,7 +617,7 @@ resource "aws_appsync_resolver" "getFavorite" {
   kind              = "PIPELINE"
   pipeline_config {
     functions = [
-      aws_appsync_function.addAddress.function_id,
+      aws_appsync_function.getFavoritesbyUser.function_id,
     ]
   }
 }
@@ -850,7 +850,7 @@ resource "aws_iam_role_policy" "favorites" {
       "Effect": "Allow",
       "Resource": [
         "${aws_dynamodb_table.favorites.arn}",
-        "${aws_dynamodb_table.address.arn}/index/userid-index"
+        "${aws_dynamodb_table.favorites.arn}/index/userid-index"
       ]
     }
   ]
