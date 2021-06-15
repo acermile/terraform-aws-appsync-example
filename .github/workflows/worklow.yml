@@ -1,36 +1,101 @@
-# This is a basic workflow to help you get started with Actions
+name: terraform-plan
 
-name: CI
+on: pull_request
 
-# Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+env:
+  TF_VERSION: 0.12.20
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  terraform-plan:
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace: [terraform-aws-appsync-example]
+
+    name: ${{ matrix.workspace }}
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    env:
+      WORKSPACE: ${{ matrix.workspace }}
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Generate tfvars Path 
+        id: tfvars
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          if [[ "${WORKSPACE}" == "st"* ]]; then
+            echo "::set-output name=tfvars_file::tfvars/staging/${WORKSPACE}.tfvars"
+          elif [[ "${WORKSPACE}" == "pd"* ]]; then
+            echo "::set-output name=tfvars_file::tfvars/production/${WORKSPACE}.tfvars"
+          else
+            echo "::set-output name=tfvars_file::UNKNOWN"
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@1.0.0
+
+
+      - name: Setup AWS Credentials
+        run: |
+          # Setup the credentials in the workspace because everything in terraform is
+          # driven off profiles
+          mkdir -p .aws
+
+          echo "[staging]" > .aws/credentials
+          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}" >> .aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}" >> .aws/credentials
+
+          # Production is needed because all of the TF state is stored in prod S3
+          echo "[production]" >> .aws/credentials
+          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}" >> .aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}" >> .aws/credentials
+
+      - name: Terraform Format
+        uses: acermile/terraform-aws-appsync-example@master
+        with:
+          tf_actions_version: ${{ env.TF_VERSION }}
+          tf_actions_subcommand: fmt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Terraform Init
+        uses: rewindio/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.TF_VERSION }}
+          tf_actions_subcommand: init
+          args: -backend-config backend/backend.tfvars
+        env:
+          TF_WORKSPACE: ${{ env.WORKSPACE }}
+          AWS_SHARED_CREDENTIALS_FILE: .aws/credentials
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Terraform Validate
+        uses: rewindio/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.TF_VERSION }}
+          tf_actions_subcommand: validate
+        env:
+          TF_WORKSPACE: ${{ env.WORKSPACE }}
+          AWS_SHARED_CREDENTIALS_FILE: .aws/credentials
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Terraform Plan
+        id: terraform-plan
+        uses: rewindio/terraform-github-actions@master
+        with:
+          tf_actions_version: ${{ env.TF_VERSION }}
+          tf_actions_subcommand: plan
+          args: -var-file backend/backend.tfvars -var-file ${{ steps.tfvars.outputs.tfvars_file }}
+        env:
+          TF_WORKSPACE: ${{ env.WORKSPACE }}
+          AWS_SHARED_CREDENTIALS_FILE: .aws/credentials
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: terraform-plan-${{ env.WORKSPACE }}
+          path: ${{ steps.terraform-plan.outputs.tf_actions_plan_output_file }}
+
+      - name: Cleanup AWS Credentials
+        run: |
+          rm -rf .aws
