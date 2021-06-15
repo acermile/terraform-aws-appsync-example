@@ -1,4 +1,4 @@
-terraform {
+/*terraform {
 
   backend "s3" {
     bucket  = "amit-eks-remote-backend"
@@ -12,4 +12,4 @@ terraform {
     //shared_credentials_file = "/home/ec2-user/.aws/credentials"
     //role_arn = "arn:aws:iam::942960519349:role/CapabilityDevSecOpsAdminRole"
   }
-}
+} */
