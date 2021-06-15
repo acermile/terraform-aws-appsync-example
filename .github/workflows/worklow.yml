@@ -92,11 +92,7 @@ jobs:
           AWS_SHARED_CREDENTIALS_FILE: .aws/credentials
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Plan Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: terraform-plan-${{ env.WORKSPACE }}
-          path: ${{ steps.terraform-plan.outputs.tf_actions_plan_output_file }}
+
 
       - name: Cleanup AWS Credentials
         run: |
