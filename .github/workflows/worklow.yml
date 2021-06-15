@@ -43,12 +43,7 @@ jobs:
           # driven off profiles
           mkdir -p .aws
 
-          echo "[staging]" > .aws/credentials
-          echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}" >> .aws/credentials
-          echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}" >> .aws/credentials
-
-          # Production is needed because all of the TF state is stored in prod S3
-          echo "[production]" >> .aws/credentials
+          echo "[default]" > .aws/credentials
           echo "aws_access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}" >> .aws/credentials
           echo "aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}" >> .aws/credentials
 
