@@ -65,7 +65,7 @@ jobs:
         with:
           tf_actions_version: ${{ env.TF_VERSION }}
           tf_actions_subcommand: init
-          args: -backend-config backend/backend.tfvars
+          
         env:
           TF_WORKSPACE: ${{ env.WORKSPACE }}
           AWS_SHARED_CREDENTIALS_FILE: .aws/credentials
@@ -87,7 +87,7 @@ jobs:
         with:
           tf_actions_version: ${{ env.TF_VERSION }}
           tf_actions_subcommand: plan
-          args: -var-file backend/backend.tfvars -var-file ${{ steps.tfvars.outputs.tfvars_file }}
+
         env:
           TF_WORKSPACE: ${{ env.WORKSPACE }}
           AWS_SHARED_CREDENTIALS_FILE: .aws/credentials
