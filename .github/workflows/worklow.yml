@@ -30,7 +30,10 @@ jobs:
             echo "::set-output name=tfvars_file::UNKNOWN"
           fi
 
-
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
 
 
       - name: Setup AWS Credentials
