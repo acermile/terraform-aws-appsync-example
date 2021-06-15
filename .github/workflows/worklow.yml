@@ -31,7 +31,7 @@ jobs:
           fi
 
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: acermile/terraform-aws-appsync-example@master
         with:
           fetch-depth: 0
 
