@@ -4,7 +4,7 @@ variable "aws-region" {
 
 variable "AWS_PROFILE" {
 
-  default = "csa"
+  default = "default"
 
 }
 
