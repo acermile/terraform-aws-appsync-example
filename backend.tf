@@ -4,7 +4,7 @@ terraform {
     bucket  = "amit-eks-remote-backend"
     key     = "appsync-api"
     region  = "us-east-1"
-    profile = "csa"
+    //profile = "csa"
     //profile = "default"
     #access_key = "YOUR-ACCESS-KEY"
     #secret_key = "YOUR-SECRET-KEY"
