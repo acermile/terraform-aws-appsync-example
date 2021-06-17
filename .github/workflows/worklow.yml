@@ -15,6 +15,7 @@ jobs:
 
     name: ${{ matrix.workspace }}
     runs-on: ubuntu-latest
+    environment: dev
 
     env:
       WORKSPACE: ${{ matrix.workspace }}
