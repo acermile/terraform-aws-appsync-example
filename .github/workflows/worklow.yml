@@ -1,9 +1,10 @@
 name: terraform-plan
 
-on: push
+on: 
+  workflow_dispatch:
 
 env:
-  TF_VERSION: 0.12.20
+  TF_VERSION: 0.15.0
 
 jobs:
   terraform-plan:
